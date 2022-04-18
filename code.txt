@@ -1,0 +1,41 @@
+mov bx, stroka
+
+@@metka:
+mov al, [bx]
+cmp al, 0x3
+je @@end
+push bx
+mov ah, 0x0E
+mov bx, 0x0033
+int 0x10
+pop bx
+inc bx
+jmp @@metka
+
+@@end:
+mov al, 0xA
+mov ah, 0x0E
+mov bx, 0x0033
+int 0x10
+mov bx, stroka2
+
+@@metka2:
+mov al, [bx]
+cmp al, 0x3
+je @@end2
+push bx
+mov ah, 0x0E
+mov bx, 0x0055
+int 0x10
+pop bx
+inc bx
+jmp @@metka2
+
+@@end2:
+int 0x20
+
+stroka:
+db "This ", 0xA, "is ", 0xA, "assembler!", 0x3
+
+stroka2:
+db "This ", "is ", "assembler ", "too!", 0x3

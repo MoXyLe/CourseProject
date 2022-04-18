@@ -1,0 +1,77 @@
+mov bx, first
+
+@@welcome:
+mov al, [bx]
+cmp al, 0
+je @@prepreloop
+push bx
+mov ah, 0x0E
+mov bx, 0x00D0
+int 0x10
+pop bx
+inc bx
+jmp @@welcome
+
+@@prepreloop:
+mov bx, alPrint
+
+@@preloop:
+mov al, [bx]
+cmp al, 0
+je @@loopStart
+push bx
+mov ah, 0x0E
+mov bx, 0x00D0
+int 0x10
+pop bx
+inc bx
+jmp @@preloop
+
+@@loopStart:
+mov bx, 0x9
+
+@@loop:
+mov al, bx
+cmp al, 0
+je @@end
+push bx
+mov ah, 0x0E
+mov bx, 0x00D0
+int 0x10
+cmp al, 1
+je @@end
+mov bx, newLine
+mov al, [bx]
+mov bx, 0x00D0
+int 0x10
+mov bx, alPrint
+jmp @@alPrinting
+
+@@endLoop:
+pop bx
+dec bx
+jmp @@loop
+
+@@alPrinting:
+mov al, [bx]
+cmp al, 0
+je @@endLoop
+push bx
+mov ah, 0x0E
+mov bx, 0x00D0
+int 0x10
+pop bx
+inc bx
+jmp @@alPrinting
+
+@@end:
+int 0x20
+
+first:
+db "Loop while al != 0", 0xA, 0
+
+alPrint:
+db "al = ", 0
+
+newLine:
+db 0xA
